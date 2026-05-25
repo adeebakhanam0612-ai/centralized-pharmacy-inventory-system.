@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %}Inventory{% endblock %}
+{% block page_title %}Medicine <span>Inventory</span>{% endblock %}
+{% block page_sub %}Manage all medicines across your pharmacy branches.{% endblock %}
+{% block topbar_actions %}
+<a href="/export" class="btn btn-outline">&#8595; Export CSV</a>
+{% endblock %}
+{% block content %}
+
+<div class="stats-row">
+  <div class="stat-card blue">
+    <div class="stat-icon blue">&#128138;</div>
+    <div><div class="stat-value">{{ medicines|length }}</div><div class="stat-label">Total Medicines</div></div>
+  </div>
+  <div class="stat-card teal">
+    <div class="stat-icon teal">&#127978;</div>
+    <div><div class="stat-value">4</div><div class="stat-label">Active Branches</div></div>
+  </div>
+  <div class="stat-card red">
+    <div class="stat-icon red">&#9888;&#65039;</div>
+    <div><div class="stat-value">{{ low_stock }}</div><div class="stat-label">Low Stock</div></div>
+  </div>
+  <div class="stat-card amber">
+    <div class="stat-icon amber">&#9200;</div>
+    <div><div class="stat-value">{{ expiring_soon }}</div><div class="stat-label">Expiring Soon</div></div>
+  </div>
+</div>
+
+{% if expiring_soon > 0 %}
+<div class="expiry-banner">&#9200; <strong>{{ expiring_soon }} medicine(s)</strong> expiring within 30 days!</div>
+{% endif %}
+
+<div class="two-col">
+  <div>
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">All Medicines</div>
+          <div class="panel-sub">{{ medicines|length }} records in database</div>
+        </div>
+        <span class="panel-action">{{ medicines|length }} total</span>
+      </div>
+      <div class="filter-row">
+        <button class="filter-chip active">All</button>
+        <button class="filter-chip">In Stock</button>
+        <button class="filter-chip">Low Stock</button>
+        <button class="filter-chip">Expiring</button>
+        <select class="filter-select">
+          <option>All Categories</option>
+          <option>Antibiotics</option><option>Analgesics</option>
+          <option>Vitamins</option><option>Antidiabetic</option><option>Antihistamine</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        {% if medicines %}
+        <table>
+          <thead>
+            <tr><th>#</th><th>Medicine Name</th><th>Category</th><th>Quantity</th><th>Expiry Date</th><th>Branch</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+          {% for med in medicines %}
+          <tr {% if med[6] %}class="expiring-row"{% endif %}>
+            <td class="id-cell">{{ med[0] }}</td>
+            <td><strong style="color:var(--t1);">{{ med[1] }}</strong></td>
+            <td><span class="badge badge-cyan" style="font-size:10px;">{{ med[2] }}</span></td>
+            <td style="font-family:var(--mono);font-weight:600;{% if med[3] < 20 %}color:#f87171;{% elif med[3] < 50 %}color:#fbbf24;{% else %}color:#34d399;{% endif %}">
+              {{ med[3] }}
+            </td>
+            <td style="font-family:var(--mono);font-size:12px;">
+              {{ med[4] }}{% if med[6] %} <span style="color:var(--amber);">&#9888;</span>{% endif %}
+            </td>
+            <td style="color:var(--t2);font-size:12px;">{{ med[5] }}</td>
+            <td>
+              {% if med[6] %}<span class="badge badge-amber">&#9200; Expiring</span>
+              {% elif med[3] < 20 %}<span class="badge badge-red">&#9888; Low Stock</span>
+              {% elif med[3] < 50 %}<span class="badge badge-purple">&#8764; Moderate</span>
+              {% else %}<span class="badge badge-green">&#10003; In Stock</span>{% endif %}
+            </td>
+            <td>
+              <a href="/delete/{{ med[0] }}" onclick="return confirm('Remove {{ med[1] }}?')">
+                <button class="icon-btn icon-btn-del" title="Delete">&#128465;&#65039;</button>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div style="text-align:center;padding:56px;color:var(--t3);">
+          <div style="font-size:32px;margin-bottom:12px;">&#128138;</div>
+          <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:6px;">No medicines yet</div>
+          <div style="font-size:12px;">Add your first entry using the form →</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Medicine Form -->
+  <div>
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">+ Add New Medicine</div>
+          <div class="panel-sub">All fields required</div>
+        </div>
+      </div>
+      <div style="padding:18px;">
+        <form action="/add" method="POST">
+          <div class="form-group">
+            <label class="form-label">Medicine Name</label>
+            <input class="form-input" type="text" name="name" placeholder="e.g. Amoxicillin 500mg" required minlength="3"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category">
+              <option>Antibiotics</option><option>Analgesics</option>
+              <option>Vitamins</option><option>Antidiabetic</option><option>Antihistamine</option>
+            </select>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Quantity</label>
+              <input class="form-input" type="number" name="quantity" placeholder="0" min="0" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expiry Date</label>
+              <input class="form-input" type="date" name="expiry" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Branch</label>
+            <select class="form-select" name="branch">
+              <option>Branch 1</option><option>Branch 2</option>
+              <option>Branch 3</option><option>Branch 4</option>
+            </select>
+          </div>
+          <div class="glow-line"></div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px;margin-top:8px;">
+            &#128190; Save to Inventory
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Quick stats panel -->
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#128200; Quick Stats</div></div>
+      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:var(--t2);">In Stock</span>
+          <span style="font-family:var(--mono);font-weight:700;color:#34d399;">
+            {{ medicines | selectattr(6, 'eq', false) | selectattr(3, 'ge', 20) | list | length }}
+          </span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:var(--t2);">Low Stock (&lt;20)</span>
+          <span style="font-family:var(--mono);font-weight:700;color:#f87171;">{{ low_stock }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:var(--t2);">Expiring Soon</span>
+          <span style="font-family:var(--mono);font-weight:700;color:#fbbf24;">{{ expiring_soon }}</span>
+        </div>
+        <div class="glow-line"></div>
+        <a href="/alerts" class="btn btn-outline" style="justify-content:center;font-size:12px;">
+          &#128276; View All Alerts
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

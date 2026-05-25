@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Analytics{% endblock %}
+{% block page_title %}Inventory <span>Analytics</span>{% endblock %}
+{% block page_sub %}Data-driven insights for smarter inventory decisions.{% endblock %}
+{% block content %}
+<div class="stats-row">
+  <div class="stat-card blue"><div class="stat-icon blue">&#128138;</div><div><div class="stat-value">{{ medicines|length }}</div><div class="stat-label">Total Medicines</div></div></div>
+  <div class="stat-card green"><div class="stat-icon green">&#128230;</div><div><div class="stat-value">{{ total_qty }}</div><div class="stat-label">Total Units</div></div></div>
+  <div class="stat-card red"><div class="stat-icon red">&#9888;&#65039;</div><div><div class="stat-value">{{ low_stock }}</div><div class="stat-label">Low Stock</div></div></div>
+  <div class="stat-card amber"><div class="stat-icon amber">&#9200;</div><div><div class="stat-value">{{ expiring_soon }}</div><div class="stat-label">Expiring Soon</div></div></div>
+</div>
+<div class="two-col">
+  <div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#128202; Medicines by Category</div></div>
+      <div style="padding:20px;">
+        {% set max_cat = categories.values()|max if categories else 1 %}
+        {% for cat, count in categories.items() %}
+        <div class="analytics-bar-row">
+          <div class="analytics-bar-label">{{ cat }}</div>
+          <div class="analytics-bar-track"><div class="analytics-bar-fill" style="width:{{ (count/max_cat*100)|int }}%;background:var(--blue);"></div></div>
+          <div class="analytics-bar-count">{{ count }}</div>
+        </div>
+        {% endfor %}
+        {% if not categories %}<div style="text-align:center;color:var(--text3);padding:20px;">No data yet.</div>{% endif %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#127978; Medicines by Branch</div></div>
+      <div style="padding:20px;">
+        {% set max_br = branches.values()|max if branches else 1 %}
+        {% set bcolors = ["var(--blue)","var(--teal)","var(--amber)","var(--green)"] %}
+        {% for br, count in branches.items() %}
+        <div class="analytics-bar-row">
+          <div class="analytics-bar-label" style="font-size:11px;">{{ br }}</div>
+          <div class="analytics-bar-track"><div class="analytics-bar-fill" style="width:{{ (count/max_br*100)|int }}%;background:var(--teal);"></div></div>
+          <div class="analytics-bar-count">{{ count }}</div>
+        </div>
+        {% endfor %}
+        {% if not branches %}<div style="text-align:center;color:var(--text3);padding:20px;">No data yet.</div>{% endif %}
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">Stock Health Overview</div></div>
+      <div style="padding:18px;display:flex;flex-direction:column;gap:10px;">
+        {% set in_stock = medicines|selectattr(3,'ge',50)|list|length %}
+        {% set moderate = medicines|selectattr(3,'ge',20)|selectattr(3,'lt',50)|list|length %}
+        <div style="background:var(--green-lt);border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;">
+          <div><div style="font-size:12px;font-weight:600;color:var(--green);">In Stock</div><div style="font-size:10px;color:var(--green);opacity:.7;">Qty &ge; 50</div></div>
+          <div style="font-size:28px;font-weight:800;color:var(--green);">{{ in_stock }}</div>
+        </div>
+        <div style="background:var(--purple-lt);border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;">
+          <div><div style="font-size:12px;font-weight:600;color:var(--purple);">Moderate</div><div style="font-size:10px;color:var(--purple);opacity:.7;">Qty 20-49</div></div>
+          <div style="font-size:28px;font-weight:800;color:var(--purple);">{{ moderate }}</div>
+        </div>
+        <div style="background:var(--red-lt);border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;">
+          <div><div style="font-size:12px;font-weight:600;color:var(--red);">Low Stock</div><div style="font-size:10px;color:var(--red);opacity:.7;">Qty &lt; 20</div></div>
+          <div style="font-size:28px;font-weight:800;color:var(--red);">{{ low_stock }}</div>
+        </div>
+        <div style="background:var(--amber-lt);border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;">
+          <div><div style="font-size:12px;font-weight:600;color:var(--amber);">Expiring Soon</div><div style="font-size:10px;color:var(--amber);opacity:.7;">Within 30 days</div></div>
+          <div style="font-size:28px;font-weight:800;color:var(--amber);">{{ expiring_soon }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

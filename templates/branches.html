@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Branches{% endblock %}
+{% block page_title %}Branch <span>Management</span>{% endblock %}
+{% block page_sub %}Monitor inventory and sync status across all pharmacy branches.{% endblock %}
+{% block content %}
+<div class="stats-row">
+  <div class="stat-card blue"><div class="stat-icon blue">&#128138;</div><div><div class="stat-value">{{ medicines|length }}</div><div class="stat-label">Total Medicines</div></div></div>
+  <div class="stat-card teal"><div class="stat-icon teal">&#127978;</div><div><div class="stat-value">4</div><div class="stat-label">Active Branches</div></div></div>
+  <div class="stat-card red"><div class="stat-icon red">&#9888;&#65039;</div><div><div class="stat-value">{{ low_stock }}</div><div class="stat-label">Low Stock</div></div></div>
+  <div class="stat-card green"><div class="stat-icon green">&#128260;</div><div><div class="stat-value">3</div><div class="stat-label">Branches Live</div></div></div>
+</div>
+{% set bnames = ["Branch 1 - Main Store","Branch 2 - City Centre","Branch 3 - North Wing","Branch 4 - Hospital"] %}
+{% set bcolors = ["#16a34a","#16a34a","#d97706","#16a34a"] %}
+{% set bstatus = ["Live","Live","Syncing","Live"] %}
+{% set bcounts = [medicines|length, 876, 654, 1102] %}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  {% for i in range(4) %}
+  <div class="branch-card">
+    <div class="branch-header">
+      <div class="branch-dot" style="background:{{ bcolors[i] }};"></div>
+      <div class="branch-name-lg">{{ bnames[i] }}</div>
+      <div class="branch-status {% if bstatus[i]=='Live' %}status-live{% else %}status-sync{% endif %}">&#9679; {{ bstatus[i] }}</div>
+    </div>
+    <div class="branch-stats">
+      <div class="branch-stat"><div class="branch-stat-val">{{ bcounts[i] }}</div><div class="branch-stat-lbl">Total Items</div></div>
+      <div class="branch-stat"><div class="branch-stat-val" style="color:var(--red);">{{ branch_data.get("Branch " ~ (i+1), {}).get("low",0) }}</div><div class="branch-stat-lbl">Low Stock</div></div>
+      <div class="branch-stat"><div class="branch-stat-val" style="color:var(--amber);">{{ branch_data.get("Branch " ~ (i+1), {}).get("expiring",0) }}</div><div class="branch-stat-lbl">Expiring</div></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

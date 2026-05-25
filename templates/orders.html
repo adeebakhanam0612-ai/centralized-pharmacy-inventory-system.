@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Orders{% endblock %}
+{% block page_title %}Restock <span>Orders</span>{% endblock %}
+{% block page_sub %}Manage restocking orders for low stock medicines.{% endblock %}
+{% block content %}
+
+<div class="stats-row">
+  <div class="stat-card red"><div class="stat-icon red">&#9888;&#65039;</div><div><div class="stat-value">{{ low_stock }}</div><div class="stat-label">Need Restocking</div></div></div>
+  <div class="stat-card amber"><div class="stat-icon amber">&#128230;</div><div><div class="stat-value">{{ low_stock }}</div><div class="stat-label">Pending Orders</div></div></div>
+  <div class="stat-card green"><div class="stat-icon green">&#10003;</div><div><div class="stat-value">0</div><div class="stat-label">Completed Orders</div></div></div>
+  <div class="stat-card blue"><div class="stat-icon blue">&#127978;</div><div><div class="stat-value">4</div><div class="stat-label">Suppliers</div></div></div>
+</div>
+
+{% if low_stock > 0 %}
+<div class="expiry-banner">&#9888;&#65039; <strong>{{ low_stock }} medicine(s)</strong> need restocking urgently — place orders below!</div>
+{% endif %}
+
+<div class="two-col">
+  <div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#128230; Medicines Needing Restock</div><span class="panel-action">{{ low_stock }} items</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Medicine</th><th>Category</th><th>Current Qty</th><th>Branch</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+          {% set found = [] %}
+          {% for med in medicines %}
+            {% if med[3] < 50 %}
+            {% set _ = found.append(1) %}
+            <tr>
+              <td><strong>{{ med[1] }}</strong></td>
+              <td>{{ med[2] }}</td>
+              <td style="color:{% if med[3] < 20 %}var(--red){% else %}var(--amber){% endif %};font-weight:700;">{{ med[3] }} units</td>
+              <td>{{ med[5] }}</td>
+              <td>
+                {% if med[3] < 20 %}<span class="badge badge-red">&#9888; Critical</span>
+                {% else %}<span class="badge badge-amber">~ Low</span>{% endif %}
+              </td>
+              <td>
+                <button onclick="placeOrder('{{ med[1] }}')" style="padding:5px 12px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;">Order</button>
+              </td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+          {% if not found %}
+          <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text3);">&#10003; All medicines are well stocked!</td></tr>
+          {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#43; Place New Order</div></div>
+      <div style="padding:18px;">
+        <div class="form-group"><label class="form-label">Medicine Name</label><input class="form-input" type="text" id="orderMed" placeholder="e.g. Paracetamol 650mg"/></div>
+        <div class="form-group"><label class="form-label">Supplier</label>
+          <select class="form-select">
+            <option>Sun Pharma</option>
+            <option>Cipla Ltd</option>
+            <option>Dr. Reddy's</option>
+            <option>Abbott India</option>
+          </select>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label class="form-label">Quantity</label><input class="form-input" type="number" placeholder="100" min="1"/></div>
+          <div class="form-group"><label class="form-label">Branch</label>
+            <select class="form-select"><option>Branch 1</option><option>Branch 2</option><option>Branch 3</option><option>Branch 4</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Expected Delivery</label><input class="form-input" type="date"/></div>
+        <button onclick="submitOrder()" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px;margin-top:4px;">&#128230; Place Order</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#128203; Recent Orders</div></div>
+      <div style="padding:14px;display:flex;flex-direction:column;gap:8px;">
+        <div style="padding:12px;background:var(--green-lt);border-radius:9px;border:1px solid #86efac;">
+          <div style="font-size:12px;font-weight:600;color:var(--green);">Amoxicillin 500mg &mdash; 200 units</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;">Sun Pharma &middot; Branch 1 &middot; Delivered</div>
+        </div>
+        <div style="padding:12px;background:var(--amber-lt);border-radius:9px;border:1px solid #fde68a;">
+          <div style="font-size:12px;font-weight:600;color:var(--amber);">Vitamin C 1000mg &mdash; 150 units</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;">Cipla Ltd &middot; Branch 2 &middot; In Transit</div>
+        </div>
+        <div style="padding:12px;background:var(--blue-lt);border-radius:9px;border:1px solid #bfdbfe;">
+          <div style="font-size:12px;font-weight:600;color:var(--blue);">Metformin 500mg &mdash; 300 units</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;">Dr. Reddy's &middot; Branch 3 &middot; Processing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function placeOrder(name) {
+  document.getElementById("orderMed").value = name;
+  document.getElementById("orderMed").focus();
+  document.getElementById("orderMed").scrollIntoView({behavior:"smooth"});
+}
+function submitOrder() {
+  var med = document.getElementById("orderMed").value;
+  if (!med) { alert("Please enter a medicine name!"); return; }
+  alert("Order placed successfully for: " + med + "!\nYour supplier will be notified.");
+}
+</script>
+{% endblock %}

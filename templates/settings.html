@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block page_title %}System <span>Settings</span>{% endblock %}
+{% block page_sub %}Configure your PharmaCentral system preferences.{% endblock %}
+{% block content %}
+<div class="two-col">
+  <div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#128276; Alert Settings</div></div>
+      <div class="settings-group" style="border:none;box-shadow:none;margin:0;">
+        <div class="settings-item"><div><div class="settings-label">Low Stock Alerts</div><div class="settings-sub">Notify when quantity falls below threshold</div></div><div class="toggle"></div></div>
+        <div class="settings-item"><div><div class="settings-label">Expiry Date Alerts</div><div class="settings-sub">Warn when medicine expires within 30 days</div></div><div class="toggle"></div></div>
+        <div class="settings-item"><div><div class="settings-label">Branch Sync Alerts</div><div class="settings-sub">Alert when a branch goes offline</div></div><div class="toggle"></div></div>
+        <div class="settings-item"><div><div class="settings-label">Email Notifications</div><div class="settings-sub">Send alerts to registered email</div></div><div class="toggle off"></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#128197; Threshold Settings</div></div>
+      <div style="padding:18px;">
+        <form action="/save_settings" method="POST">
+          <div class="form-group"><label class="form-label">Low Stock Threshold (units)</label><input class="form-input" type="number" name="low_threshold" value="{{ session.get('low_threshold', 20) }}" min="1"/></div>
+          <div class="form-group"><label class="form-label">Expiry Warning (days before)</label><input class="form-input" type="number" name="expiry_days" value="{{ session.get('expiry_days', 30) }}" min="1"/></div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;">&#128190; Save Settings</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#128100; Account Info</div></div>
+      <div style="padding:18px;">
+        <div style="text-align:center;margin-bottom:18px;">
+          <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#0d9488);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;margin:0 auto 10px;">{{ session.user[:2]|upper }}</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);">{{ session.user }}</div>
+          <div style="font-size:12px;color:var(--text3);">{{ session.role }} &middot; Branch 1</div>
+        </div>
+        <div class="form-group"><label class="form-label">Username</label><input class="form-input" type="text" value="{{ session.user }}" readonly style="background:var(--surface2);"/></div>
+        <div class="form-group"><label class="form-label">Role</label><input class="form-input" type="text" value="{{ session.role }}" readonly style="background:var(--surface2);"/></div>
+        <a href="/logout" class="btn btn-danger" style="width:100%;justify-content:center;padding:10px;display:flex;">&#9211; Logout</a>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">&#8505;&#65039; System Info</div></div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Version</span><span style="font-weight:600;">PharmaCentral v1.0</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Team</span><span style="font-weight:600;">Quantum Debuggers</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Backend</span><span style="font-weight:600;">Python Flask</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Database</span><span style="font-weight:600;">SQLite</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Total Medicines</span><span style="font-weight:600;">{{ medicines|length }}</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
