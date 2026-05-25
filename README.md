@@ -285,6 +285,8 @@ centralized-pharmacy-inventory-system/
 ## 📸 UI Gallery
 
 > Screenshots of the live application:
+> <img width="1911" height="1030" alt="image" src="https://github.com/user-attachments/assets/1bf0a2b6-dd2a-4b3c-9923-73ca185b1382" />
+
 
 ### 🏠 Dashboard
 The main dashboard shows real-time KPIs — total medicines, low stock count, near-expiry alerts, and branch summaries at a glance.
