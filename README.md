@@ -286,6 +286,11 @@ centralized-pharmacy-inventory-system/
 
 > Screenshots of the live application:
 > <img width="1911" height="1030" alt="image" src="https://github.com/user-attachments/assets/1bf0a2b6-dd2a-4b3c-9923-73ca185b1382" />
+<img width="1900" height="1021" alt="image" src="https://github.com/user-attachments/assets/aee4d2ef-1a9a-4e89-b592-4a4dfb9210cb" />
+<img width="1896" height="1008" alt="image" src="https://github.com/user-attachments/assets/69d3c883-8456-4439-b432-9d794ad71506" />
+
+<img width="1912" height="1027" alt="image" src="https://github.com/user-attachments/assets/85d8582d-5b41-41d6-9521-ae8fee2a4387" />
+
 
 
 ### 🏠 Dashboard
