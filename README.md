@@ -291,6 +291,7 @@ centralized-pharmacy-inventory-system/
 
 <img width="1912" height="1027" alt="image" src="https://github.com/user-attachments/assets/85d8582d-5b41-41d6-9521-ae8fee2a4387" />
 
+<img width="1895" height="1025" alt="image" src="https://github.com/user-attachments/assets/f3965bb6-7d45-4e42-8540-a488e28fc3d7" />
 
 
 ### 🏠 Dashboard
