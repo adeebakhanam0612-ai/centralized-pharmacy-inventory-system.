@@ -286,25 +286,23 @@ centralized-pharmacy-inventory-system/
 
 > Screenshots of the live application:
 > <img width="1911" height="1030" alt="image" src="https://github.com/user-attachments/assets/1bf0a2b6-dd2a-4b3c-9923-73ca185b1382" />
-<img width="1900" height="1021" alt="image" src="https://github.com/user-attachments/assets/aee4d2ef-1a9a-4e89-b592-4a4dfb9210cb" />
-<img width="1896" height="1008" alt="image" src="https://github.com/user-attachments/assets/69d3c883-8456-4439-b432-9d794ad71506" />
-
-<img width="1912" height="1027" alt="image" src="https://github.com/user-attachments/assets/85d8582d-5b41-41d6-9521-ae8fee2a4387" />
-
-<img width="1895" height="1025" alt="image" src="https://github.com/user-attachments/assets/f3965bb6-7d45-4e42-8540-a488e28fc3d7" />
-
-
 ### 🏠 Dashboard
 The main dashboard shows real-time KPIs — total medicines, low stock count, near-expiry alerts, and branch summaries at a glance.
 
+<img width="1900" height="1021" alt="image" src="https://github.com/user-attachments/assets/aee4d2ef-1a9a-4e89-b592-4a4dfb9210cb" />
 ### 💊 Inventory Management
 Full CRUD interface with real-time search, category filter chips, status badges (In Stock / Low Stock / Expired), and CSV export.
+
+<img width="1896" height="1008" alt="image" src="https://github.com/user-attachments/assets/69d3c883-8456-4439-b432-9d794ad71506" />
 
 ### 🚨 Alerts Page
 Automatically populated with medicines below the stock threshold or expiring within 30 days. Color-coded for urgency.
 
+<img width="1912" height="1027" alt="image" src="https://github.com/user-attachments/assets/85d8582d-5b41-41d6-9521-ae8fee2a4387" />
 ### 📈 Analytics
 Pandas-powered breakdowns: stock by category, branch comparisons, expiry timeline — helping procurement teams make data-driven decisions.
+
+<img width="1895" height="1025" alt="image" src="https://github.com/user-attachments/assets/f3965bb6-7d45-4e42-8540-a488e28fc3d7" />
 
 ### ⚙️ Settings
 Configurable low-stock threshold and near-expiry detection window — adjustable at runtime without code changes.
@@ -378,7 +376,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 **Built with ❤️ by Team Quantum Debuggers**
 
-*Centralized Pharmacy Inventory Management System — Week 4 · 2025*
+*Centralized Pharmacy Inventory Management System — Week 4 · 2026*
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0D7377&height=100&section=footer" width="100%"/>
 
