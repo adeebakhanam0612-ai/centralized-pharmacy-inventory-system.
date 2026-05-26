@@ -138,25 +138,14 @@ medicines
 ├── name            TEXT NOT NULL
 ├── category        TEXT
 ├── quantity        INTEGER NOT NULL CHECK(quantity >= 0)
-├── unit_price      REAL NOT NULL CHECK(unit_price > 0)
 ├── expiry_date     DATE NOT NULL
-├── branch          TEXT NOT NULL
-├── supplier        TEXT
-├── reorder_level   INTEGER DEFAULT 10
-└── last_updated    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+└── branch          TEXT NOT NULL
 
 users
 ├── id              INTEGER PRIMARY KEY AUTOINCREMENT
 ├── username        TEXT UNIQUE NOT NULL
 ├── password_hash   TEXT NOT NULL
 └── role            TEXT DEFAULT 'staff'
-
-settings
-├── id              INTEGER PRIMARY KEY
-├── low_stock_threshold    INTEGER DEFAULT 10
-└── near_expiry_days       INTEGER DEFAULT 30
-```
-
 ---
 
 ## 🛠️ Tech Stack
@@ -241,10 +230,6 @@ Username: admin
 Password: admin123
 ```
 
-> ⚠️ Change the default password after first login via the Settings page.
-
----
-
 ## 📁 Project Structure
 
 ```
@@ -255,7 +240,6 @@ centralized-pharmacy-inventory-system/
 ├── config.py               # App configuration (thresholds, secret key)
 ├── db_helpers.py           # Centralised database connection helpers
 ├── requirements.txt        # Python dependencies
-├── pharmacy.db             # SQLite database (auto-created on init)
 │
 ├── templates/              # Jinja2 HTML templates
 │   ├── base.html           # Base layout with sidebar navigation
